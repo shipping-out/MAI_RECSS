@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MlemmyAI</title>
+
+    <link href='https://fonts.googleapis.com/css?family=Inter' rel='stylesheet'>
+    <link rel="stylesheet" href="./styles/style.css">
+    <link rel="stylesheet" href="./styles/home.css">
+
+    <script type="module" src="./scripts/customElements.js"></script>
+    <script type="module" src="./scripts/home.js"></script>
+</head>
+
+<body>
+    <m-ai-header header="MlemmyAI"></m-ai-header>
+
+    <main>
+        <section class="chatBrowser">
+            <h2>Recent chats</h2>
+            <div class="chatList">
+                <m-ai-chat-card></m-ai-chat-card>
+                <m-ai-chat-card></m-ai-chat-card>
+            </div>
+        </section>
+
+        <section class="botBrowser">
+            <h2>Browse bots</h2>
+
+            <form autocomplete="off" class="sortControls">
+                <!-- Search query by name -->
+                <label class="searchBox" for="searchBar">
+                    <img src="./icons/search.png" alt="Search Icon">
+                    <input type="search" name="search" id="searchBar" placeholder="Search bots...">
+                </label>
+
+                <!-- Where tags are stored for search query -->
+                <div class="tagContainer">
+                    <div id="tagBox" class="tagBox"></div>
+                    <button type="button" id="tagToggle">⮟</button>
+                </div>
+
+                <!-- Sorting between criteria -->
+                <fieldset class="sortFrom">
+                    <button id="sf-all" name="sortfrom" value="all" class="inactive">All</button>
+                    <button id="sf-following" name="sortfrom" value="following" class="inactive">Following</button>
+                    <button id="sf-favorites" name="sortfrom" value="favorites" class="inactive">Favorites</button>
+                </fieldset>
+
+                <!-- Order sort -->
+                <select name="sort" class="sortMode">
+                    <option id="popular">Popular</option>
+                    <option id="latest">Latest</option>
+                </select>
+            </form>
+
+            <div class="botList">
+                <m-ai-bot-card></m-ai-bot-card>
+
+            </div>
+        </section>
+
+    </main>
+
+
+
+    <m-ai-footer></m-ai-footer>
+</body>
+
+</html>

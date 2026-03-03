@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MlemmyAI</title>
+
+    <link href='https://fonts.googleapis.com/css?family=Inter' rel='stylesheet'>
+    <link rel="stylesheet" href="./styles/style.css">
+    <link rel="stylesheet" href="./styles/login.css">
+
+    <script type="module" src="./scripts/customElements.js"></script>
+</head>
+
+<body>
+    <m-ai-header empty></m-ai-header>
+
+    <main>
+        <h1>Login</h1>
+        <form action="/login" method="get">
+            <fieldset>
+                <input type="text" name="username" id="username">
+                <input type="password" name="password" id="password">
+
+                <input type="submit" value="Submit">
+            </fieldset>
+        </form>
+    </main>
+
+    <m-ai-footer></m-ai-footer>
+</body>
+
+</html>
