@@ -1,5 +1,7 @@
-import * as database from "./scripts/database.js";
-import * as session from "./scripts/session.js";
+import * as db from "./scripts/database";
+import * as session from "./scripts/session";
+
+await db.connectDatabase();
 
 const server = Bun.serve({
     port: 3000,
@@ -7,9 +9,7 @@ const server = Bun.serve({
     routes: {
         // Pages
         "/": (req) => session.ServePage(req, "./public/home.html"),
-        "/login": (req) => {
-            return new Response()
-        }
+        "/login": (req) => session.AttemptLogin(req),
     },
 
     // Fetch static content

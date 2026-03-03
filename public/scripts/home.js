@@ -14,6 +14,10 @@ const standardTags = [
 const searchParams = new URL(document.URL).searchParams;
 let selectedTags = searchParams.get("tags") ? decodeURIComponent(searchParams.get("tags")).split(",") : [];
 
+function updateBotList() {
+    const pageId = searchParams.get("page") || 1;
+}
+
 function renderTags() {
     tagBox.innerHTML = "";
 

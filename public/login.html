@@ -11,17 +11,19 @@
     <link rel="stylesheet" href="./styles/login.css">
 
     <script type="module" src="./scripts/customElements.js"></script>
+    <script type="module" src="./scripts/login.js"></script>
 </head>
 
 <body>
     <m-ai-header empty></m-ai-header>
 
     <main>
+        <img class="site-logo" src="./icons/icon.png" alt="Logo">
         <h1>Login</h1>
-        <form action="/login" method="get">
+        <form id="loginForm">
             <fieldset>
-                <input type="text" name="username" id="username">
-                <input type="password" name="password" id="password">
+                <input required id="usernameField" type="text" name="username" id="username">
+                <input required id="passwordField" type="password" name="password" id="password">
 
                 <input type="submit" value="Submit">
             </fieldset>
