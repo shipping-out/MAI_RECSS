@@ -44,9 +44,9 @@
 
                 <!-- Sorting between criteria -->
                 <fieldset class="sortFrom">
-                    <button id="sf-all" name="sortfrom" value="all" class="inactive">All</button>
-                    <button id="sf-following" name="sortfrom" value="following" class="inactive">Following</button>
-                    <button id="sf-favorites" name="sortfrom" value="favorites" class="inactive">Favorites</button>
+                    <button type="button" id="sf-all" name="sortfrom" value="all">All</button>
+                    <button type="button" id="sf-following" name="sortfrom" value="following">Following</button>
+                    <button type="button" id="sf-favorites" name="sortfrom" value="favorites">Favorites</button>
                 </fieldset>
 
                 <!-- Order sort -->
@@ -56,15 +56,11 @@
                 </select>
             </form>
 
-            <div class="botList">
-                <m-ai-bot-card></m-ai-bot-card>
+            <div id="botList" class="botList"></div>
 
-            </div>
         </section>
 
     </main>
-
-
 
     <m-ai-footer></m-ai-footer>
 </body>
