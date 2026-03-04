@@ -1,7 +1,7 @@
 import * as db from "./scripts/database";
 import * as session from "./scripts/session";
 import * as info from "./scripts/info";
-import { response } from "express";
+import * as create from "./scripts/create";
 
 await db.connectDatabase();
 
@@ -11,8 +11,13 @@ const server = Bun.serve({
     routes: {
         // Pages
         "/": (req) => session.ServePage(req, "./public/home.html"),
+        "/create": (req) => session.ServePage(req, "./public/create.html"),
+
+        // User login
         "/login": (req) => session.AttemptLogin(req),
 
+
+        // Bot stuff
         "/botlist": async (req) => {
             if (!session.IsLoggedIn(req)) {
                 return new Response(JSON.stringify({ response: "Not logged in" }),
@@ -29,7 +34,17 @@ const server = Bun.serve({
                 );
             }
 
+            return info.BotInfo(req)
+        },
 
+        "/api/createBot": async (req) => {
+            if (!session.IsLoggedIn(req)) {
+                return new Response(JSON.stringify({ response: "Not logged in" }),
+                    { status: 403, headers: { "Content-Type": "application/json" } }
+                );
+            }
+
+            return create.CreateBot(req);
         }
     },
 

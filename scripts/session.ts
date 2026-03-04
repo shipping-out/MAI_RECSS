@@ -40,8 +40,10 @@ export async function IsLoggedIn(req: Bun.BunRequest): Promise<boolean> {
 export async function ServePage(req: Bun.BunRequest, page: string) {
     // Make sure to wrap it in a safe statement
     try {
+        console.log("User is logged in?:", await IsLoggedIn(req));
+
         // No, send login. The session needs to be valid and insided the sessions.
-        if (!IsLoggedIn(req)) {
+        if (!await IsLoggedIn(req)) {
             return new Response(Bun.file("./public/login.html"), {
                 headers: { "Content-Type": "text/html" },
             });
@@ -60,7 +62,6 @@ export async function ServePage(req: Bun.BunRequest, page: string) {
 export async function AttemptLogin(req: Bun.BunRequest) {
     try {
         const formData = await req.json();
-        console.log(formData);
 
         const username = formData.username?.toString() || "";
         const password = formData.password?.toString() || "";

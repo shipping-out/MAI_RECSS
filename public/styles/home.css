@@ -86,8 +86,7 @@ m-ai-chat-card {
     gap: 20px;
 
     @media (max-width: 700px) {
-        grid-template-columns: repeat(auto-fill, 165px);
-        gap: 10px;
+        grid-template-columns: repeat(auto-fill, 160px);
     }
 }
 
@@ -261,9 +260,6 @@ input[type="search"] {
         height: 40px;
     }
 
-    @media (max-width: 700px) {
-        margin-bottom: 60px;
-    }
 }
 
 select,
@@ -278,65 +274,6 @@ option {
     border-radius: var(--border-radius);
 }
 
-.tagContainer {
-    height: auto;
-
-    display: flex;
-    flex-direction: row;
-    gap: 10px;
-
-    margin-bottom: 10px;
-}
-
-#tagToggle {
-    right: 10px;
-    margin-top: 4px;
-    position: absolute;
-    aspect-ratio: 1 / 1;
-}
-
-.tagBox {
-    width: calc(100% - 80px);
-    display: flex;
-    flex-wrap: wrap;
-    height: fit-content;
-
-    max-height: 35px;
-    overflow: hidden;
-    padding: 10px;
-    padding-top: 5px;
-    gap: 5px;
-
-    background-color: var(--darkest-background-color);
-    border-radius: var(--border-radius);
-
-    button {
-        border-radius: calc(var(--border-radius) * 2);
-        background-color: var(--dropdown-button-color);
-        border: 2px solid var(--dropdown-active-button-color);
-        padding: 7px 14px 7px 14px;
-
-        width: fit-content;
-        aspect-ratio: initial;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        max-width: 150px;
-
-        &:active {
-            background-color: var(--dropdown-active-button-color);
-        }
-
-        &[class="selected"] {
-            background-color: var(--active-button-color);
-            box-shadow: 0 0 4px var(--active-active-button-color);
-            border: 2px solid var(--active-active-button-color);
-        }
-    }
-
-    transition: max-height 0.3s ease-out;
-}
-
 .botBrowser {
     margin-top: 10px;
     margin-bottom: 10px;
@@ -344,4 +281,8 @@ option {
     border-radius: calc(var(--border-radius) * 2);
     padding: 10px;
     background-color: rgba(0, 0, 0, 0.1);
+
+    h2 {
+        margin-top: 0;
+    }
 }

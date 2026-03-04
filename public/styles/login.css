@@ -1,19 +1,18 @@
 main {
-
     display: flex;
     flex-direction: column;
-    
+
     align-items: center;
 
-    h1{
+    h1 {
         font-size: 5dvh;
     }
 
     #signupMessage {
         position: absolute;
         bottom: var(--footer-height);
-        font-size: 4dvw;
-        
+        font-size: clamp(0, 4dvw, 10px);
+
         a {
             color: var(--active-button-color);
             text-decoration: underline;

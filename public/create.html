@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MlemmyAI</title>
+
+    <link href='https://fonts.googleapis.com/css?family=Inter' rel='stylesheet'>
+    <link rel="stylesheet" href="./styles/style.css">
+    <link rel="stylesheet" href="./styles/create.css">
+
+    <script type="module" src="./scripts/customElements.js"></script>
+    <script type="module" src="./scripts/create.js"></script>
+</head>
+
+<body>
+    <m-ai-header header="Create a Bot"></m-ai-header>
+
+    <main>
+        <form autocomplete="off" id="createForm">
+            <section class="avatarSection">
+                <h2 class="required">Image</h2>
+                <input hidden type="file" name="avatar" id="avatarPicker" accept=".png, .jpeg, .gif">
+
+                <!-- Upload box -->
+                <label for="avatarPicker" class="uploadBox">
+                    <span id="uploadText">Click to Upload</span>
+                    <img src="/icons/upload.png" alt="Upload Icon" class="uploadIcon" id="uploadIcon">
+
+                    <img src="" alt="Uploaded Icon" id="avatarPreview" hidden>
+                </label>
+            </section>
+
+            <section class="detailSection">
+                <h2 class="required">Bot Name</h2>
+                <input type="text" name="botname" id="botName" placeholder="Bot Name">
+
+                <h2>Bot Chat Name</h2>
+                <input type="text" name="botchatname" id="botChatName" placeholder="Bot Chat Name">
+                <p class="hint">
+                    If this field is filled, the bot will have this displayed instead of it's
+                    Bot name.
+                </p>
+
+                <h2>Bot Bio</h2>
+                <textarea name="botbio" id="botBio" placeholder="Start writing"></textarea>
+                <p class="hint">This is the public description that everyone can see.</p>
+
+                <h2>Bot Tags</h2>
+                <m-ai-tags max="10"></m-ai-tags>
+                <p class="hint">Tag your bot to be discovered easier. You can have a total of 10 tags.</p>
+
+                <h2>Personality</h2>
+                <textarea name="botpersonality" id="botPersonality"
+                    placeholder="Describe your bot's persona. This helps the bot know how it should act."></textarea>
+
+                <h2>Example Messages</h2>
+                <textarea name="botexamplemessages" id="botExampleMessages"
+                    placeholder="Give example conversation to guide your bot's responses."></textarea>
+
+                <h2>Starting Message</h2>
+                <textarea name="botstartingmessage" id="botStartingMessage"
+                    placeholder="This is the message that users will begin the conversation with."></textarea>
+
+                <fieldset>
+                    <h2>Public Bot</h2>
+                    <input type="checkbox" name="publicbot" id="publicBotButton">
+                    <p class="hint">Is your bot public and discoverable by others?</p>
+                </fieldset>
+
+                <fieldset>
+                    <h2>Public Definition</h2>
+                    <input type="checkbox" name="publicbot" id="publicPersonalityButton">
+                    <p class="hint">Is your bot's definition visible to others?</p>
+                </fieldset>
+
+                <input type="submit" value="Create">
+            </section>
+        </form>
+    </main>
+
+    <m-ai-footer></m-ai-footer>
+</body>
+
+</html>

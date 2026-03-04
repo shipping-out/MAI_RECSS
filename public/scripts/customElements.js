@@ -12,17 +12,73 @@ function formatNumber(n) {
     }
 }
 
-const placeholder_img = "https://pub-565faf2130f64e41963a6ebebd514d02.r2.dev/images/blind_bot_11658e3d-b054-4186-b2a6-faf82f4f5248.png";
+const placeholder_img = "https://pub-565faf2130f64e41963a6ebebd514d02.r2.dev/images/blind_bot_11658e3d-b054-4186-b2a6-faf82f4f5248.png"
 const placeholder_text = "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Aperiam, ab nesciunt. Dignissimos id fugit odit nostrum temporibus natus cumque dolorem?";
+
+let searchParams = new URL(document.URL).searchParams;
+let selectedTags = searchParams.get("tags") ? decodeURIComponent(searchParams.get("tags")).split(",") : [];
+let maxTags;
+
+export async function updateBotList() {
+    const sortFromButtons = document.querySelectorAll('button[name="sortfrom"]');
+    if (!sortFromButtons) { return };
+    if (!document.getElementById("botList")) { return };
+
+    searchParams = new URL(window.location.href).searchParams;
+
+    const pageId = searchParams.get("page") || 1;
+
+    const sortValue = searchParams.get("sortfrom") || "all";
+    const foundSortButton = document.getElementById(`sf-${sortValue}`);
+
+    sortFromButtons.forEach((button) => {
+        button.classList.add("inactive");
+    });
+
+    if (foundSortButton) {
+        foundSortButton.classList.remove("inactive");
+    }
+
+    // Get bots
+    const res = await fetch(`/botlist?search=${searchParams.get("search")}&tags=${searchParams.get("tags")}`, { method: "GET" });
+    const data = await res.json();
+
+    botList.innerHTML = "";
+    if (data) {
+        data.data.forEach((value) => {
+            const newBotButton = document.createElement("m-ai-bot-card");
+            newBotButton.setAttribute("messages", value.messages);
+            newBotButton.setAttribute("description", value.bio);
+            newBotButton.setAttribute("name", value.name);
+            newBotButton.setAttribute("tags", value.tags || "");
+            newBotButton.setAttribute("src", value.img);
+
+            botList.appendChild(newBotButton);
+        })
+    } else {
+        createNotice("Failed to load bots!");
+    }
+
+    console.log(data);
+
+}
+// For tags
+const tagToggle = document.getElementById("tagToggle");
+const standardTags = [
+    "Male", "Female", "Dominant", "Submissive", "Smut", "Game", "Anime", "Non-Human",
+    "Switch", "Fluff", "Multiple", "Scenario", "Magical", "MLM", "WLW", "MalePOV",
+    "FemPOV", "AnyPOV", "Angst", "Furry", "Non-Binary", "RPG", "Horror", "Pokémon",
+    "Trans", "Sci-Fi", "Robot", "Comedy"
+];
 
 class MAIHeader extends HTMLElement {
     connectedCallback() {
         this.innerHTML = !this.hasAttribute("empty") ? `
     <header>
         <m-ai-dropdown hamburger>
-            <a href="create">Create bot</a>
-            <a href="bots">Your bots</a>
-            <a href="chats">Your chats</a>
+            <a href="create">Create Bot</a>
+            <a href="bots">Your Bots</a>
+            <a href="chats">Your Chats</a>
         </m-ai-dropdown>
 
         <h1>${this.getAttribute("header") || ""}</h1>
@@ -36,7 +92,6 @@ class MAIHeader extends HTMLElement {
         </div>
     </header>
     ` : `<header></header>`;
-
     }
 }
 customElements.define("m-ai-header", MAIHeader);
@@ -110,10 +165,15 @@ class MAIChatCard extends HTMLElement {
 }
 customElements.define("m-ai-chat-card", MAIChatCard);
 
-
 class MAIBotCard extends HTMLElement {
     connectedCallback() {
         const message = this.innerHTML;
+        let builtTags = "";
+
+        this.getAttribute("tags").split(",").forEach((tag) => {
+            if (tag.trim() < 1) { return };
+            builtTags += `<li>${tag.trim()}</li>`;
+        })
 
         this.innerHTML = `
         <div>
@@ -121,11 +181,9 @@ class MAIBotCard extends HTMLElement {
                 <p>${this.getAttribute("name") || "Unnamed Bot"}</p>
                 <hr>
                 <img src="${this.getAttribute("src") || placeholder_img}" alt="Bot Profile">
-                <p class="chats">${formatNumber((Math.floor((Math.random() * 5000) / 10)) * 10) || this.getAttribute("chats")}</p>
+                <p class="chats">${formatNumber(this.getAttribute("messages"))}</p>
                 <hr>
-                <ul class="tags">
-                    <li>Test</li>
-                </ul>
+                <ul class="tags">${builtTags}</ul>
                 <p class="description">${this.getAttribute("description") || placeholder_text}</p>
             </div>
         </div>
@@ -135,10 +193,89 @@ class MAIBotCard extends HTMLElement {
 }
 customElements.define("m-ai-bot-card", MAIBotCard);
 
+////////
+export function renderTags() {
+    const tagBox = document.getElementById("tagBox");
+    if (!tagBox) { return };
+
+    tagBox.innerHTML = "";
+
+    const sortedTags = [
+        ...selectedTags.filter(tag => standardTags.includes(tag)),
+        ...standardTags.filter(tag => !selectedTags.includes(tag))
+    ];
+
+    sortedTags.forEach(tag => {
+        const tagButton = document.createElement("button");
+        tagButton.textContent = tag;
+        tagButton.type = "button";
+
+        if (selectedTags.includes(tag)) tagButton.classList.add("selected");
+
+        tagBox.appendChild(tagButton);
+
+        tagButton.addEventListener("click", () => {
+            const index = selectedTags.indexOf(tag);
+            if (index > -1) {
+                selectedTags.splice(index, 1);
+            } else {
+                if (maxTags && (selectedTags.length + 1) > maxTags) { return };
+                selectedTags.push(tag);
+            }
+
+            const url = new URL(window.location.href);
+
+            if (selectedTags.length > 0) {
+                url.searchParams.set("tags", selectedTags.join(","));
+            } else {
+                url.searchParams.delete("tags");
+            }
+
+            history.replaceState(null, "", url);
+
+            renderTags();
+            updateBotList();
+        });
+    });
+}
+
+class MAITags extends HTMLElement {
+    connectedCallback() {
+        const message = this.innerHTML;
+        maxTags = this.getAttribute("max");
+
+        this.innerHTML = `
+        <div class="tagContainer">
+            <div id="tagBox" class="tagBox"></div>
+            <button type="button" id="tagToggle">⮟</button>
+        </div>
+        `
+
+        const tagToggle = document.getElementById("tagToggle");
+        tagToggle.addEventListener("click", (event) => {
+            event.preventDefault();
+
+            if (tagBox.classList.contains("open")) {
+                tagBox.classList.remove("open");
+                tagBox.style.maxHeight = "35px";
+                tagToggle.textContent = "⮟";
+            } else {
+                tagBox.classList.add("open");
+                tagBox.style.maxHeight = tagBox.scrollHeight + "px";
+                tagToggle.textContent = "⮝";
+            }
+        });
+
+
+        renderTags();
+    }
+}
+customElements.define("m-ai-tags", MAITags);
+
+///////
 
 // Add for every page
 document.body.innerHTML += `<div id="m-ai-popup-utility"></div>`
-// <m-ai-notice>Text</m-ai-notice>
 
 export function createNotice(text) {
     const newMessage = document.createElement("m-ai-notice");

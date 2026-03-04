@@ -1,0 +1,203 @@
+body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.uploadIcon {
+    margin-top: 10px;
+    width: 30px;
+    height: 30px;
+}
+
+main {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    padding: 40px 20px;
+}
+
+form {
+    width: 600px;
+    max-width: 95vw;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+section {
+    width: 100%;
+}
+
+.uploadBox {
+    width: 100%;
+    height: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px 40px;
+    box-sizing: border-box;
+    background: var(--darker-background-color);
+    border: 2px dashed var(--white);
+    border-radius: calc(var(--border-radius) * 2);
+    cursor: pointer;
+}
+
+#avatarPreview {
+    width: calc(100% + 80px);
+    height: calc(100% + 40px);
+    object-fit: contain;
+}
+
+input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 10px;
+}
+
+h2 {
+    font-weight: normal;
+    font-size: 100%;
+    text-align: left;
+    margin: 0 0 10px 0;
+}
+
+.required::after {
+    content: " *";
+    color: var(--active-button-color);
+}
+
+.detailSection {
+    h2:not(:first-child) {
+        margin-top: 30px;
+    }
+}
+
+.hint {
+    margin: 0;
+    margin-top: 5px;
+    font-size: 80%;
+    color: var(--transparent-white);
+}
+
+.tagContainer {
+    margin: 0;
+    position: relative;
+    width: 100%;
+
+    q .tagBox {
+        padding-bottom: 4px;
+        width: calc(100% - 70px);
+    }
+
+    #tagToggle {
+        margin-top: 2px;
+        right: 0;
+        width: 40px;
+        height: 40px;
+    }
+}
+
+input:not([type="checkbox"]):not([type="file"]):not([type="submit"]) {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 12px;
+    background-color: var(--field-background-color);
+    color: var(--white);
+    border: 1px solid var(--transparent-white);
+    border-radius: var(--border-radius);
+    font-family: inherit;
+    outline: none;
+}
+
+input:not([type="checkbox"]):not([type="file"]):not([type="submit"]):hover,
+textarea:hover {
+    background-color: var(--active-field-background-color);
+    border-color: var(--inactive-button-color);
+}
+
+input:not([type="checkbox"]):not([type="file"]):not([type="submit"]):focus,
+textarea:focus {
+    background-color: var(--active-field-background-color);
+    border-color: var(--active-button-color);
+}
+
+textarea {
+    width: 100%;
+    min-height: 100px;
+    box-sizing: border-box;
+    padding: 12px;
+    background-color: var(--field-background-color);
+    color: var(--white);
+    border: 1px solid var(--transparent-white);
+    border-radius: var(--border-radius);
+    font-family: inherit;
+    resize: vertical;
+    outline: none;
+}
+
+input[type="checkbox"] {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 32px;
+    height: 32px;
+    margin: 10px 0;
+    cursor: pointer;
+    background-color: var(--field-background-color);
+    border: 2px solid var(--transparent-white);
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+input[type="checkbox"]:hover {
+    border-color: var(--active-button-color);
+    background-color: var(--active-field-background-color);
+}
+
+input[type="checkbox"]:checked {
+    background-color: var(--active-button-color);
+    border-color: var(--active-button-color);
+}
+
+input[type="checkbox"]:checked::after {
+    content: '✔';
+    color: white;
+}
+
+input[type="checkbox"]+.hint {
+    margin-top: -5px;
+}
+
+input[type="submit"] {
+    margin-top: 20px;
+    width: 100%;
+    padding: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    border: none;
+    font-size: 125%;
+    height: 10vh;
+    border-radius: var(--border-radius);
+    background-color: var(--active-button-color);
+    color: var(--white);
+}
+
+input[type="submit"]:hover {
+    background-color: var(--active-active-button-color);
+}
+
+input[type="submit"]:active {
+    background-color: var(--active-button-color);
+}
+
+fieldset {
+    padding: 5px 20px;
+    margin: 0;
+
+    margin-top: 10px;
+    width: calc(100% - 40px);
+}
