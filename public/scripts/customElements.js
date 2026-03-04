@@ -12,7 +12,7 @@ function formatNumber(n) {
     }
 }
 
-const placeholder_img = "https://pub-565faf2130f64e41963a6ebebd514d02.r2.dev/images/blind_bot_11658e3d-b054-4186-b2a6-faf82f4f5248.png"
+const placeholder_img = "https://pub-565faf2130f64e41963a6ebebd514d02.r2.dev/images/blind_bot_785635f1-c993-49df-98a5-c97fe91d8c30"
 const placeholder_text = "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Aperiam, ab nesciunt. Dignissimos id fugit odit nostrum temporibus natus cumque dolorem?";
 
 let searchParams = new URL(document.URL).searchParams;

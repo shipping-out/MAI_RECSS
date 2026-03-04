@@ -5,6 +5,10 @@ import * as create from "./scripts/create";
 
 await db.connectDatabase();
 
+const LogInResponse = new Response(JSON.stringify({ response: "Not logged in" }),
+    { status: 403, headers: { "Content-Type": "application/json" } }
+);
+
 const server = Bun.serve({
     port: 3000,
 
@@ -19,30 +23,18 @@ const server = Bun.serve({
 
         // Bot stuff
         "/botlist": async (req) => {
-            if (!session.IsLoggedIn(req)) {
-                return new Response(JSON.stringify({ response: "Not logged in" }),
-                    { status: 403, headers: { "Content-Type": "application/json" } }
-                );
-            }
+            if (!session.IsLoggedIn(req)) { return LogInResponse };
 
             return info.BotQuery(req);
         },
         "/botinfo": async (req) => {
-            if (!session.IsLoggedIn(req)) {
-                return new Response(JSON.stringify({ response: "Not logged in" }),
-                    { status: 403, headers: { "Content-Type": "application/json" } }
-                );
-            }
+            if (!session.IsLoggedIn(req)) { return LogInResponse };
 
             return info.BotInfo(req)
         },
 
         "/api/createBot": async (req) => {
-            if (!session.IsLoggedIn(req)) {
-                return new Response(JSON.stringify({ response: "Not logged in" }),
-                    { status: 403, headers: { "Content-Type": "application/json" } }
-                );
-            }
+            if (!session.IsLoggedIn(req)) { return LogInResponse };
 
             return create.CreateBot(req);
         }
