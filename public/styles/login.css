@@ -1,10 +1,47 @@
 main {
-    justify-items: center;
+
+    display: flex;
+    flex-direction: column;
+    
+    align-items: center;
+
+    h1{
+        font-size: 5dvh;
+    }
+
+    #signupMessage {
+        position: absolute;
+        bottom: var(--footer-height);
+        font-size: 4dvw;
+        
+        a {
+            color: var(--active-button-color);
+            text-decoration: underline;
+        }
+    }
+}
+
+.site-logo {
+    margin-top: 5dvh;
+    width: 75px;
+    height: 75px;
+
+    object-fit: cover;
 }
 
 fieldset {
+    margin-top: 5dvh;
     padding: 20px;
     display: flex;
     flex-direction: column;
     gap: 20px;
+    width: 70dvw;
+    max-width: 400px;
+
+    input {
+        &[type="submit"] {
+            margin-top: 7dvh;
+            aspect-ratio: unset;
+        }
+    }
 }
