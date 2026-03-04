@@ -5,13 +5,16 @@ loginForm.addEventListener("submit", async (event) => {
 
     const res = await fetch("/login", {
         method: "POST",
-        body: {
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
             username: document.getElementById("usernameField").value,
             password: document.getElementById("passwordField").value,
-        }
+        })
     });
 
-    const data = await res.data();
-    console.log(data);
+    const data = await res.json();
 
-})
+    if (res.ok) { window.location.reload() };
+});

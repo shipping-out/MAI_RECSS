@@ -268,6 +268,7 @@ input[type="search"] {
 
 select,
 option {
+    margin-top: 10px;
     border: 2px solid var(--dropdown-active-button-color);
     background-color: var(--dropdown-button-color);
     color: var(--white);
@@ -283,6 +284,8 @@ option {
     display: flex;
     flex-direction: row;
     gap: 10px;
+
+    margin-bottom: 10px;
 }
 
 #tagToggle {

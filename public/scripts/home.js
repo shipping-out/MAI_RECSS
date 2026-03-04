@@ -1,8 +1,10 @@
 import { createNotice } from './customElements.js';
 
 const tagBox = document.getElementById("tagBox");
+const botList = document.getElementById("botList");
 const tagToggle = document.getElementById("tagToggle");
 const searchBar = document.getElementById("searchBar");
+const sortFromButtons = document.querySelectorAll('button[name="sortfrom"]');
 
 const standardTags = [
     "Male", "Female", "Dominant", "Submissive", "Smut", "Game", "Anime", "Non-Human",
@@ -11,12 +13,47 @@ const standardTags = [
     "Trans", "Sci-Fi", "Robot", "Comedy"
 ];
 
-const searchParams = new URL(document.URL).searchParams;
+let searchParams = new URL(document.URL).searchParams;
 let selectedTags = searchParams.get("tags") ? decodeURIComponent(searchParams.get("tags")).split(",") : [];
 
-function updateBotList() {
+async function updateBotList() {
+    searchParams = new URL(window.location.href).searchParams;
+
     const pageId = searchParams.get("page") || 1;
+
+    const sortValue = searchParams.get("sortfrom") || "all";
+    const foundSortButton = document.getElementById(`sf-${sortValue}`);
+
+    sortFromButtons.forEach((button) => {
+        button.classList.add("inactive");
+    });
+
+    if (foundSortButton) {
+        foundSortButton.classList.remove("inactive");
+    }
+
+    // Get bots
+    const res = await fetch(`/botlist?search=${searchParams.get("search")}`, { method: "GET" });
+    const data = await res.json();
+
+    botList.innerHTML = "";
+    if (data) {
+        data.data.forEach((value) => {
+            const newBotButton = document.createElement("m-ai-bot-card");
+            newBotButton.setAttribute("description", value.bio);
+            newBotButton.setAttribute("name", value.name);
+            newBotButton.setAttribute("src", value.img);
+
+            botList.appendChild(newBotButton);
+        })
+    } else {
+        createNotice("Failed to load bots!");
+    }
+
+    console.log(data);
+
 }
+updateBotList();
 
 function renderTags() {
     tagBox.innerHTML = "";
@@ -71,29 +108,11 @@ tagToggle.addEventListener("click", (event) => {
         tagBox.style.maxHeight = tagBox.scrollHeight + "px";
         tagToggle.textContent = "⮝";
     }
-})
-
-const foundSortButton = document.getElementById(`sf-${searchParams.get("sortfrom")}`)
-if (foundSortButton) {
-    foundSortButton.classList.remove("inactive");
-} else {
-    createNotice(`Sorting type "${searchParams.get("sortfrom")}" doesn't exist!`)
-}
-
-let timeout;
-searchBar.addEventListener("input", (event) => {
-    clearTimeout(timeout);
-
-    timeout = setTimeout(() => {
-        const value = searchBar.value.trim();
-        console.log("Search after pause:", value);
-    }, 300);
-
-    updateBotList();
 });
 
 const form = document.querySelector(".sortControls");
 
+searchBar.value = searchParams.get("search");
 form.addEventListener("submit", (event) => {
     event.preventDefault();
 
@@ -109,3 +128,13 @@ form.addEventListener("submit", (event) => {
     history.replaceState(null, "", url);
     updateBotList();
 });
+
+sortFromButtons.forEach((button) => {
+    button.addEventListener("click", (event) => {
+        const url = new URL(window.location.href);
+        url.searchParams.set("sortfrom", button.textContent.toLowerCase());
+
+        history.replaceState(null, "", url);
+        updateBotList();
+    })
+})

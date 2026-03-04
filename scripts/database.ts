@@ -24,3 +24,8 @@ export async function connectDatabase() {
         throw err;
     }
 }
+
+
+export async function GetBotInfo(_id: string) {
+
+}

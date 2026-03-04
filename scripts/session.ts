@@ -14,8 +14,8 @@ async function VerifyPassword(inputPassword: string, storedHash: string): Promis
 
 // //
 
-// Middleware to force login for each page
-export async function ServePage(req: Bun.BunRequest, page: string) {
+
+export async function IsLoggedIn(req: Bun.BunRequest): Promise<boolean> {
     // Make sure to wrap it in a safe statement
     try {
         // Check for a valid login
@@ -25,6 +25,23 @@ export async function ServePage(req: Bun.BunRequest, page: string) {
 
         // No, send login. The session needs to be valid and insided the sessions.
         if (!session || session.expiresAt < new Date()) {
+            return false;
+        };
+
+        // Success, send page
+        return true
+    } catch (err) {
+        console.log(`Error when serving page: ${err}`);
+    }
+
+    return false;
+}
+// Middleware to force login for each page
+export async function ServePage(req: Bun.BunRequest, page: string) {
+    // Make sure to wrap it in a safe statement
+    try {
+        // No, send login. The session needs to be valid and insided the sessions.
+        if (!IsLoggedIn(req)) {
             return new Response(Bun.file("./public/login.html"), {
                 headers: { "Content-Type": "text/html" },
             });
@@ -42,18 +59,25 @@ export async function ServePage(req: Bun.BunRequest, page: string) {
 // Login function
 export async function AttemptLogin(req: Bun.BunRequest) {
     try {
-        const formData = await req.formData();
+        const formData = await req.json();
         console.log(formData);
 
-        const username = formData.get("username")?.toString() || "";
-        const password = formData.get("password")?.toString() || "";
+        const username = formData.username?.toString() || "";
+        const password = formData.password?.toString() || "";
 
         console.log(`[Username]: ${username}`);
 
         const user = await Database.collection("users").findOne({ username });
         const valid = user ? await VerifyPassword(password, user.passwordHash) : false;
 
-        if (!valid) { return ServePage(req, "./public/login.html"); }
+        if (!valid) {
+            return new Response(JSON.stringify({}), {
+                status: 401,
+                headers: {
+                    "Content-Type": "application/json",
+                }
+            });
+        };
 
         // Create a new session
         const sessionToken = crypto.randomUUID();
@@ -64,20 +88,20 @@ export async function AttemptLogin(req: Bun.BunRequest) {
             expiresAt: new Date(Date.now() + 3600_000),
         });
 
-        return new Response(Bun.file("./public/home.html"), {
+        return new Response(JSON.stringify({ success: true }), {
             status: 200,
             headers: {
-                "Location": "/home",
-                "Content-Type": "text/html",
+                "Content-Type": "application/json",
                 "Set-Cookie": `session=${sessionToken}; HttpOnly; Secure; SameSite=Strict; Path=/; Max-Age=3600`
             }
         });
     } catch (err) {
-        console.log(`Error in login: ${err}`);
+        console.log(`Error with login: ${err}`);
 
-        return new Response(JSON.stringify(Bun.file("./public/login.html")), {
-            status: 500, headers: {
-                "Content-Type": "text/plain"
+        return new Response(JSON.stringify({}), {
+            status: 500,
+            headers: {
+                "Content-Type": "application/json",
             }
         });
     }
