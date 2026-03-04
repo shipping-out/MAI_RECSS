@@ -94,6 +94,8 @@ createForm.addEventListener("submit", async (event) => {
 
         document.location = `bot?id=${data.id}`;
     } else {
-        createNotice("Failed to create bot!");
+        console.log(data);
+
+        createNotice(`Failed to create bot: ${data.response || "?"}`);
     }
 });

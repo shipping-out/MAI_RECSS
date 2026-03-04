@@ -1,6 +1,8 @@
 import { Database } from "./database";
 import bcrypt from "bcrypt";
 
+const public_user_projection = { username: 1, displayname: 1, img: 1, bots: 1, description: 1, chats: 1 };
+
 // Passwords //
 async function HashPassword(plainPassword: string): Promise<string> {
     const saltRounds = 10; // Higher = more secure but slower
@@ -14,6 +16,35 @@ async function VerifyPassword(inputPassword: string, storedHash: string): Promis
 
 // //
 
+// Get user
+export async function GetUserFromSession(req: Bun.BunRequest) {
+    try {
+        const cookieHeader = req.headers.get("cookie");
+        const sessionCookie = cookieHeader?.match(/session=([^;]+)/)?.[1];
+
+        if (!sessionCookie) return null;
+
+        const session = await Database
+            .collection("sessions")
+            .findOne({ token: sessionCookie });
+
+        if (!session || session.expiresAt < new Date()) {
+            return null;
+        }
+
+        // Fetch the user associated with the session
+        const user = await Database
+            .collection("users")
+            .findOne(
+                { username: session.username },
+            );
+
+        return user || null;
+    } catch (err) {
+        console.log(`Error getting user from session: ${err}`);
+        return null;
+    }
+}
 
 export async function IsLoggedIn(req: Bun.BunRequest): Promise<boolean> {
     // Make sure to wrap it in a safe statement
@@ -36,6 +67,7 @@ export async function IsLoggedIn(req: Bun.BunRequest): Promise<boolean> {
 
     return false;
 }
+
 // Middleware to force login for each page
 export async function ServePage(req: Bun.BunRequest, page: string) {
     // Make sure to wrap it in a safe statement

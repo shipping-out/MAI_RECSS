@@ -34,7 +34,7 @@
 
             <section class="detailSection">
                 <h2 class="required">Bot Name</h2>
-                <input type="text" name="botname" id="botName" placeholder="Bot Name">
+                <input required type="text" name="botname" id="botName" placeholder="Bot Name">
 
                 <h2>Bot Chat Name</h2>
                 <input type="text" name="botchatname" id="botChatName" placeholder="Bot Chat Name">
@@ -51,16 +51,16 @@
                 <m-ai-tags max="10"></m-ai-tags>
                 <p class="hint">Tag your bot to be discovered easier. You can have a total of 10 tags.</p>
 
-                <h2>Personality</h2>
-                <textarea name="botpersonality" id="botPersonality"
+                <h2 class="required">Personality</h2>
+                <textarea required name="botpersonality" id="botPersonality"
                     placeholder="Describe your bot's persona. This helps the bot know how it should act."></textarea>
 
                 <h2>Example Messages</h2>
                 <textarea name="botexamplemessages" id="botExampleMessages"
                     placeholder="Give example conversation to guide your bot's responses."></textarea>
 
-                <h2>Starting Message</h2>
-                <textarea name="botstartingmessage" id="botStartingMessage"
+                <h2 class="required">Starting Message</h2>
+                <textarea required name="botstartingmessage" id="botStartingMessage"
                     placeholder="This is the message that users will begin the conversation with."></textarea>
 
                 <fieldset>

@@ -87,7 +87,7 @@ h2 {
     position: relative;
     width: 100%;
 
-    q .tagBox {
+    .tagBox {
         padding-bottom: 4px;
         width: calc(100% - 70px);
     }
