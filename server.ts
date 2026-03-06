@@ -17,6 +17,8 @@ const server = Bun.serve({
         "/": (req) => session.ServePage(req, "./public/home.html"),
         "/create": (req) => session.ServePage(req, "./public/create.html"),
 
+        "/chat": (req) => session.ServePage(req, "./public/chat.html"),
+
         // User login
         "/login": (req) => session.AttemptLogin(req),
 

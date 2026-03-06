@@ -272,6 +272,51 @@ class MAITags extends HTMLElement {
 }
 customElements.define("m-ai-tags", MAITags);
 
+class MAIChatMessage extends HTMLElement {
+    connectedCallback() {
+        const message = this.innerHTML;
+        maxTags = this.getAttribute("max");
+
+        this.innerHTML = `
+        <article class="message">
+            <img src="${this.getAttribute("src") || placeholder_img}" alt="Profile Picture">
+            <section>
+                <span>
+                    <p>${this.getAttribute("sender") || "?"}</p>
+                    <span class="buttons">
+                        <button><img src="./icons/edit.png" alt="Edit"></button>
+                        <button><img src="./icons/regenerate.png" alt="Regenerate"></button>
+                        <button><img src="./icons/delete.png" alt="Delete"></button>
+                    </span>
+                </span>
+                <article>
+                    <p>${this.getAttribute("content") || placeholder_text}</p>
+                </article>
+            </section>
+        </article>
+        `
+
+        const tagToggle = document.getElementById("tagToggle");
+        tagToggle.addEventListener("click", (event) => {
+            event.preventDefault();
+
+            if (tagBox.classList.contains("open")) {
+                tagBox.classList.remove("open");
+                tagBox.style.maxHeight = "35px";
+                tagToggle.textContent = "⮟";
+            } else {
+                tagBox.classList.add("open");
+                tagBox.style.maxHeight = tagBox.scrollHeight + "px";
+                tagToggle.textContent = "⮝";
+            }
+        });
+
+
+        renderTags();
+    }
+}
+customElements.define("m-ai-chat-message", MAIChatMessage);
+
 ///////
 
 // Add for every page

@@ -6,6 +6,13 @@ const IncompleteDataResponse = new Response(JSON.stringify({ response: "Incomple
     { status: 403, headers: { "Content-Type": "application/json" } }
 );
 
+const standardTags = [
+    "Male", "Female", "Dominant", "Submissive", "Smut", "Game", "Anime", "Non-Human",
+    "Switch", "Fluff", "Multiple", "Scenario", "Magical", "MLM", "WLW", "MalePOV",
+    "FemPOV", "AnyPOV", "Angst", "Furry", "Non-Binary", "RPG", "Horror", "Pokémon",
+    "Trans", "Sci-Fi", "Robot", "Comedy"
+];
+
 export async function CreateBot(req: Bun.BunRequest) {
     try {
         const uploadingUser = await session.GetUserFromSession(req);
@@ -25,6 +32,8 @@ export async function CreateBot(req: Bun.BunRequest) {
 
             isPublic,
             isDefinitionPublic,
+
+            tags,
         } = await req.json();
 
         // Make sure fields are filled in
@@ -41,7 +50,24 @@ export async function CreateBot(req: Bun.BunRequest) {
         if (!buffer) { return IncompleteDataResponse };
 
         const uploadedImage = await image.UploadImage(buffer, `${uploadingUser.username}_bot_${crypto.randomUUID()}`);
-        console.log(uploadedImage);
+
+        console.log("User tags:", tags);
+
+        const addedTags: string[] = [];
+
+        tags?.split(",").forEach((tag: string) => {
+            const clean = tag.trim().toLowerCase();
+
+            if (!standardTags.map(t => t.toLowerCase()).includes(clean)) {
+                console.log("Adding", clean, "to tags as user tag");
+
+                addedTags.push(`#${clean}`);
+            } else {
+                addedTags.push(clean);
+                console.log("Adding", clean, "to tags");
+
+            }
+        });
 
         const builtBot = {
             img: uploadedImage,
@@ -56,6 +82,8 @@ export async function CreateBot(req: Bun.BunRequest) {
 
             isPublic,
             isDefinitionPublic,
+
+            tags: addedTags,
 
             owner: uploadingUser._id,
             createdAt: new Date(),

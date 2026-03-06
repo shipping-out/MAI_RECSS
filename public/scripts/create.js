@@ -8,6 +8,8 @@ const createForm = document.getElementById("createForm");
 
 const STORAGE_KEY = "new_bot_draft";
 
+let searchParams = new URL(document.URL).searchParams;
+
 const saveToDraft = () => {
     const draftData = {
         avatar: avatarPreview.src,
@@ -78,8 +80,11 @@ createForm.addEventListener("submit", async (event) => {
         botExampleMessages: document.getElementById("botExampleMessages").value,
         botStartingMessage: document.getElementById("botStartingMessage").value,
         isPublic: document.getElementById("publicBotButton").checked,
-        isDefinitionPublic: document.getElementById("publicPersonalityButton").checked
+        isDefinitionPublic: document.getElementById("publicPersonalityButton").checked,
+        tags: searchParams.get("tags"),
     };
+
+    console.log(botData);
 
     const res = await fetch("/api/createBot", {
         method: "POST",
